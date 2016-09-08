@@ -13,8 +13,6 @@ define([
         MOBILE_BREAKPOINT: 767,
         TABLET_BREAKPOINT: 1023
     };
-    // var mobileBreakpoint = 767;
-    // var tabletBreakpoint = 1023;
     var breakpointNames = {
         small: 'mobile',
         medium: 'tablet',
@@ -25,9 +23,6 @@ define([
         tabletMediaQuery: '(min-width: ' + SITE_OPTIONS.MOBILE_BREAKPOINT + 'px) and (max-width: ' + SITE_OPTIONS.TABLET_BREAKPOINT + 'px)',
         desktopMediaQuery: '(min-width: ' + SITE_OPTIONS.TABLET_BREAKPOINT + 'px)'
     };
-    // var mobileMediaQuery = '(max-width: ' + mobileBreakpoint + 'px)';
-    // var tabletMediaQuery = '(min-width: ' + mobileBreakpoint + 'px) and (max-width: ' + tabletBreakpoint + 'px)';
-    // var desktopMediaQuery = '(min-width: ' + tabletBreakpoint + 'px)';
     var customer = customerData.get('customer');
     var isMobile = function () {
         return Modernizr.mq(mediaQuery.mobileMediaQuery);
