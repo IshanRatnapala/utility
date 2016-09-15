@@ -13,7 +13,7 @@ define([
         MOBILE_BREAKPOINT: 767,
         TABLET_BREAKPOINT: 1023
     };
-    var breakpointNames = {
+    var BREAKPOINT_NAMES = {
         small: 'mobile',
         medium: 'tablet',
         large: 'desktop'
@@ -35,11 +35,11 @@ define([
     };
     var getCurrentBreakpoint = function () {
         if (isMobile()) {
-            return breakpointNames.small;
+            return BREAKPOINT_NAMES.small;
         } else if (isTablet()) {
-            return breakpointNames.medium;
+            return BREAKPOINT_NAMES.medium;
         } else if (isDesktop()) {
-            return breakpointNames.large;
+            return BREAKPOINT_NAMES.large;
         }
     };
     var isTouch = function () {
