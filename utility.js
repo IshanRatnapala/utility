@@ -1,45 +1,41 @@
 define([
     'jquery',
     'underscore',
+    'matchMedia',
     'Magento_Customer/js/customer-data',
     'modernizr/modernizr',
     'mage/mage'
-], function ($, _, customerData) {
+], function ($, _, mediaCheck, customerData) {
     'use strict';
 
-    var version = '0.2';
-
-    var SITE_OPTIONS = {
-        MOBILE_BREAKPOINT: 767,
-        TABLET_BREAKPOINT: 1023
-    };
-    var BREAKPOINT_NAMES = {
+    var version = '0.0.2';
+    var mobileBreakpoint = 767;
+    var tabletBreakpoint = 1023;
+    var breakpointNames = {
         small: 'mobile',
         medium: 'tablet',
         large: 'desktop'
     };
-    var mediaQuery = {
-        mobileMediaQuery: '(max-width: ' + SITE_OPTIONS.MOBILE_BREAKPOINT + 'px)',
-        tabletMediaQuery: '(min-width: ' + SITE_OPTIONS.MOBILE_BREAKPOINT + 'px) and (max-width: ' + SITE_OPTIONS.TABLET_BREAKPOINT + 'px)',
-        desktopMediaQuery: '(min-width: ' + SITE_OPTIONS.TABLET_BREAKPOINT + 'px)'
-    };
+    var mobileMediaQuery = '(max-width: ' + mobileBreakpoint + 'px)';
+    var tabletMediaQuery = '(min-width: ' + mobileBreakpoint + 'px) and (max-width: ' + tabletBreakpoint + 'px)';
+    var desktopMediaQuery = '(min-width: ' + tabletBreakpoint + 'px)';
     var customer = customerData.get('customer');
     var isMobile = function () {
-        return Modernizr.mq(mediaQuery.mobileMediaQuery);
+        return Modernizr.mq(mobileMediaQuery);
     };
     var isTablet = function () {
-        return Modernizr.mq(mediaQuery.tabletMediaQuery);
+        return Modernizr.mq(tabletMediaQuery);
     };
     var isDesktop = function () {
-        return Modernizr.mq(mediaQuery.desktopMediaQuery);
+        return Modernizr.mq(desktopMediaQuery);
     };
     var getCurrentBreakpoint = function () {
         if (isMobile()) {
-            return BREAKPOINT_NAMES.small;
+            return breakpointNames.small;
         } else if (isTablet()) {
-            return BREAKPOINT_NAMES.medium;
+            return breakpointNames.medium;
         } else if (isDesktop()) {
-            return BREAKPOINT_NAMES.large;
+            return breakpointNames.large;
         }
     };
     var isTouch = function () {
@@ -54,6 +50,36 @@ define([
     var contains = function (container, element, checkIfSelf) {
         container = container instanceof jQuery ? container[0] : container;
         return (checkIfSelf && $(container).is(element)) || $.contains(container, element);
+    };
+
+    /* Stop body scroll (for tablets and mobile) */
+    var bodyScroll = {
+        savedScrollPos: null,
+        savedBodyMargin: null,
+        fixedElement: null,
+        stop: function (body) {
+            this.resume(); /* Resume if already stopped then continue to stopping body scroll */
+            this.fixedElement = $(body).length ? $(body) : $('body');
+            this.savedScrollPos = $(window).scrollTop();
+            this.savedBodyMargin = parseInt(this.fixedElement.css('margin-top'), 10) || 0;
+            this.fixedElement
+                .css('position', 'fixed')
+                .css('margin-top', '-' + (this.savedBodyMargin + this.savedScrollPos) + 'px', 'important')
+                .addClass('scrolling-fixed');
+        },
+        resume: function () {
+            if (this.fixedElement && this.fixedElement.length) {
+                this.fixedElement
+                    .css('position', 'initial')
+                    .css('margin-top', this.savedBodyMargin + 'px')
+                    .removeClass('scrolling-fixed');
+                $(window).scrollTop(this.savedScrollPos);
+
+                this.fixedElement = null;
+                this.savedScrollPos = null;
+                this.savedBodyMargin = null;
+            }
+        }
     };
 
     /* Scroll to element */
@@ -101,8 +127,8 @@ define([
 
     return {
         version: version,
-        mobileBreakpoint: SITE_OPTIONS.MOBILE_BREAKPOINT,
-        tabletBreakpoint: SITE_OPTIONS.TABLET_BREAKPOINT,
+        mobileBreakpoint: mobileBreakpoint,
+        tabletBreakpoint: tabletBreakpoint,
         isMobile: isMobile,
         isTablet: isTablet,
         isDesktop: isDesktop,
@@ -111,6 +137,7 @@ define([
         isUserLoggedIn: isUserLoggedIn,
         customer: customer,
         contains: contains,
-        scrollBy: scrollBy
+        scrollBy: scrollBy,
+        bodyScroll: bodyScroll
     };
 });
