@@ -1,11 +1,10 @@
 define([
     'jquery',
     'underscore',
-    'matchMedia',
     'Magento_Customer/js/customer-data',
     'modernizr/modernizr',
     'mage/mage'
-], function ($, _, mediaCheck, customerData) {
+], function ($, _, customerData) {
     'use strict';
 
     var version = '0.0.2';
