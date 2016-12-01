@@ -123,6 +123,22 @@ define([
             lastBreakpoint = currentBreakpoint;
         }
     });
+    
+    /* Waits for an element to appear on page.
+     * @param waitingForElemSelector : must be a selector string.
+     * @param callback : callback function.
+     * @param all other params will be passed into the callback function.
+     * Returns the interval object */
+    var waitForAndDo = function (waitingForElemSelector, callback) {
+        var args = Array.prototype.slice.call(arguments, 2);
+        var interval = setInterval(function () {
+            if ($(waitingForElemSelector).length) {
+                clearInterval(interval);
+                callback.apply(this, args);
+            }
+        }, 100);
+        return interval;
+    };
 
     return {
         version: version,
@@ -137,6 +153,7 @@ define([
         customer: customer,
         contains: contains,
         scrollBy: scrollBy,
-        bodyScroll: bodyScroll
+        bodyScroll: bodyScroll,
+        waitForAndDo: waitForAndDo
     };
 });
