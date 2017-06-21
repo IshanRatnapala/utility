@@ -61,9 +61,11 @@ define([
             this.fixedElement = $(body).length ? $(body) : $('body');
             this.savedScrollPos = $(window).scrollTop();
             this.savedBodyMargin = parseInt(this.fixedElement.css('margin-top'), 10) || 0;
+            this.savedWidth = this.fixedElement.css('width');
             this.fixedElement
                 .css('position', 'fixed')
                 .css('margin-top', '-' + (this.savedBodyMargin + this.savedScrollPos) + 'px', 'important')
+                .css('width', '100%')
                 .addClass('scrolling-fixed');
         },
         resume: function () {
@@ -71,6 +73,7 @@ define([
                 this.fixedElement
                     .css('position', 'initial')
                     .css('margin-top', this.savedBodyMargin + 'px')
+                    .css('width', this.savedWidth)
                     .removeClass('scrolling-fixed');
                 $(window).scrollTop(this.savedScrollPos);
 
