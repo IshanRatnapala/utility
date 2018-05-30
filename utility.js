@@ -7,7 +7,7 @@ define([
 ], function ($, _, customerData) {
     'use strict';
 
-    var version = '0.0.3';
+    var version = '0.0.4';
     var mobileBreakpoint = 767;
     var tabletBreakpoint = 1023;
     var breakpointNames = {
@@ -115,6 +115,15 @@ define([
     $.fn.scrollPageHere = function (offset, duration) {
         scrollPage(this, offset, duration);
         return this;
+    };
+    
+    /* Check if element is in the viewport */
+    $.fn.isInViewport = function() {
+        var elementTop = $(this).offset().top;
+        var elementBottom = elementTop + $(this).outerHeight();
+        var viewportTop = $(window).scrollTop();
+        var viewportBottom = viewportTop + $(window).height();
+        return elementBottom > viewportTop && elementTop < viewportBottom;
     };
 
     /* Trigger an event on breakpoint change */
