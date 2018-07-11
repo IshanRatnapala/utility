@@ -16,8 +16,8 @@ define([
         large: 'desktop'
     };
     var mobileMediaQuery = '(max-width: ' + mobileBreakpoint + 'px)';
-    var tabletMediaQuery = '(min-width: ' + mobileBreakpoint + 'px) and (max-width: ' + tabletBreakpoint + 'px)';
-    var desktopMediaQuery = '(min-width: ' + tabletBreakpoint + 'px)';
+    var tabletMediaQuery = '(min-width: ' + (mobileBreakpoint + 1) + 'px) and (max-width: ' + tabletBreakpoint + 'px)';
+    var desktopMediaQuery = '(min-width: ' + (tabletBreakpoint + 1) + 'px)';
     var customer = customerData.get('customer');
     var isMobile = function () {
         return Modernizr.mq(mobileMediaQuery);
